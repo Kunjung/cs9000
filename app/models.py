@@ -1,4 +1,5 @@
 from app import db
+from flask_login import UserMixin
 
 ratings = db.Table('ratings',
 		db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
@@ -7,7 +8,7 @@ ratings = db.Table('ratings',
 	)
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
 	__tablename__ = 'users'
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(42), unique=True)

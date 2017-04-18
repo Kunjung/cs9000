@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 	
+	<h1> Hello, {{ username }} </h1>
 
 	<ul class="list-group list-inline">
 	{% for movie in movies %}
@@ -11,5 +12,7 @@
 		
 	{% endfor %}
 	</ul>
+	
+	<a href="{{ url_for('logout') }}">Logout</a>
 
 {% endblock %}
