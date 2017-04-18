@@ -1,0 +1,37 @@
+{% extends "bootstrap/base.html" %}
+{% block head %} 
+{{ super() }}
+<title>CRISPR</title>
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"> 
+
+{% endblock %}
+
+
+
+{% block body %}
+<div class="container">
+	<div class="jumbotron">
+		
+		<center>
+		<h1> Movie Recommender v0.1</h1>
+
+		<p>Next Milestone: Login/Logout and Signup </p>
+		<a href="{{url_for('login')}}">login</a>
+		....................
+		<a href="{{url_for('secret')}}">Secret</a>
+		</center>
+	</div>
+
+
+	<ul class="list-group list-inline">
+	{% for movie in movies %}
+		<li class="list-group-item">
+			<p>{{ movie.name }}</p>
+			<img src="static/images/{{ movie.name }}.jpg"/>
+		</li>
+		
+	{% endfor %}
+	</ul>
+</div>
+
+{% endblock %}
