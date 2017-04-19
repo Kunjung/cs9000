@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="row">
+	<div class="col-xs-4 center-block">
+		<form class="form-signin" method="POST" action="{{url_for('setpreferences')}}">
+			<h2 class="form-signin-heading">Enter preference values from 0 to 10</h2>
+			{{ form.hidden_tag() }}
+			{{ wtf.form_field(form.comedy) }}
+			{{ wtf.form_field(form.action) }}
+			{{ wtf.form_field(form.romance) }}
+			{{ wtf.form_field(form.scifi) }}
+
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Set Preferences</button>
+		</form>
+	</div>
+</div>
+
+
+{% endblock %}

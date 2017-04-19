@@ -7,6 +7,14 @@ ratings = db.Table('ratings',
 		db.Column('rating', db.Integer)
 	)
 
+class Preference(db.Model):
+	__tablename__ = 'preferences'
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	comedy = db.Column(db.Float)
+	action = db.Column(db.Float)
+	romance = db.Column(db.Float)
+	scifi = db.Column(db.Float) 
 
 class User(UserMixin, db.Model):
 	__tablename__ = 'users'
@@ -14,6 +22,7 @@ class User(UserMixin, db.Model):
 	username = db.Column(db.String(42), unique=True)
 	password = db.Column(db.String(42))
 	rated = db.relationship('Movie', secondary=ratings, backref='raters', lazy='dynamic')
+	
 
 	def __init__(self, username, password):
 		self.username = username
@@ -26,6 +35,7 @@ class Movie(db.Model):
 	__tablename__ = 'movies'
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(42), unique=True)
+
 
 	def __init__(self, name):
 		self.name = name

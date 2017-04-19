@@ -1,12 +1,12 @@
 from flask import render_template, redirect, url_for, request, session
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField
+from wtforms import StringField, PasswordField, BooleanField, IntegerField
 from wtforms.validators import InputRequired, Email, Length
 from flask_login import login_user, logout_user, login_required, current_user
 
 from app import app, db, login_manager
-from .models import Movie, User, ratings
+from .models import *
 
 
 @login_manager.user_loader
@@ -24,6 +24,11 @@ class RegisterForm(FlaskForm):
 	username = StringField('Username', validators=[InputRequired(), Length(min=4, max=42)])
 	password = PasswordField('Password', validators=[InputRequired(), Length(min=4, max=42)])
 	
+class PreferenceForm(FlaskForm):
+	comedy = IntegerField('Comedy', validators=[InputRequired()])
+	action = IntegerField('Action', validators=[InputRequired()])
+	romance = IntegerField('Romance', validators=[InputRequired()])
+	scifi = IntegerField('Scifi', validators=[InputRequired()])
 
 @app.route('/')
 def home():
@@ -53,7 +58,8 @@ def signup():
 		new_user = User(form.username.data, form.password.data)
 		db.session.add(new_user)
 		db.session.commit()
-		return '<h1> New User created </h1>'
+		login_user(new_user, remember=True)
+		return redirect(url_for('setpreferences'))
 
 	return render_template('signup.html', form=form)
 
@@ -61,6 +67,24 @@ def signup():
 def secret():
 	return render_template('secret.html')
 	
+@app.route('/setpreferences', methods=['POST', 'GET'])
+@login_required
+def setpreferences():
+	form = PreferenceForm()
+	if form.validate_on_submit():
+		user_id = current_user.id
+		
+		comedy = int(form.comedy.data) / 10
+		action = int(form.action.data) / 10
+		romance = int(form.romance.data) / 10
+		scifi = int(form.scifi.data) / 10
+		prefer = Preference(user_id=user_id, comedy=comedy, action=action, romance=romance, scifi=scifi)
+		db.session.add(prefer)
+		db.session.commit()
+		return redirect(url_for('dashboard'))
+
+	return render_template('setpreferences.html', form=form)
+
 
 @app.route('/dashboard')
 @login_required
