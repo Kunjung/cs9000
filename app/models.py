@@ -35,10 +35,18 @@ class Movie(db.Model):
 	__tablename__ = 'movies'
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(42), unique=True)
+	comedy = db.Column(db.Float)
+	action = db.Column(db.Float)
+	romance = db.Column(db.Float)
+	scifi = db.Column(db.Float) 
 
 
-	def __init__(self, name):
+	def __init__(self, name, comedy, action, romance, scifi):
 		self.name = name
+		self.comedy = comedy
+		self.action = action
+		self.romance = romance
+		self.scifi = scifi
 
 	def __repr__(self):
 		return '<Movie %r>' % self.name
@@ -49,7 +57,7 @@ class Movie(db.Model):
 #     ratings.c.user_id == user1.id
 # ).where(
 #     ratings.c.movie_id == movie1.id
-# ).value(rating=new_rating)
+# ).values(rating=new_rating)
 #
 # db.session.execute(query)
 # val = db.session.execute(query).first()[2]

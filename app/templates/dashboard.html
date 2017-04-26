@@ -6,10 +6,13 @@
 
 	<ul class="list-group list-inline">
 	{% for movie in movies %}
+
+		<a href="{{ url_for('rate', movie_id=movie.id) }}">
 		<li class="list-group-item">
 			<p>{{ movie.name }}</p>
-			<img src="static/images/{{ movie.name }}.jpg"/>
+			<img src="/static/images/{{ movie.name }}.jpg"/>
 		</li>
+		</a>
 		
 	{% endfor %}
 	</ul>

@@ -30,6 +30,9 @@ class PreferenceForm(FlaskForm):
 	romance = IntegerField('Romance', validators=[InputRequired()])
 	scifi = IntegerField('Scifi', validators=[InputRequired()])
 
+class RatingForm(FlaskForm):
+	rating = IntegerField('Rating', validators=[InputRequired()])
+
 @app.route('/')
 def home():
 	movies = Movie.query.limit(10)
@@ -91,6 +94,25 @@ def setpreferences():
 def dashboard():
 	movies = Movie.query.limit(10)
 	return render_template('dashboard.html', username=current_user.username, movies=movies)
+
+
+@app.route('/rate/<int:movie_id>', methods=['GET', 'POST'])
+@login_required
+def rate(movie_id):
+	user_id = current_user.id
+	# get user's rating for this movie
+	form = RatingForm()
+	if form.validate_on_submit():
+		rating = int(form.rating.data)
+		# update the ratings table and add the rating
+		query = ratings.insert().values(user_id=user_id, movie_id=movie_id, rating=rating)
+		db.session.execute(query)
+		db.session.commit()
+		return redirect(url_for('dashboard'))
+
+	movie = Movie.query.get(movie_id)
+	return render_template('rate.html', movie=movie, form=form)
+
 
 @app.route('/logout')
 @login_required

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="row">
+	<div class="col-xs-4 center-block">
+		<h2 class="form-signin-heading"> {{ movie.name }}</h2>
+		<img src="/static/images/{{ movie.name }}.jpg"/>
+			
+		<form class="form-signin" action="{{ url_for('rate', movie_id=movie.id) }}" method="POST">
+			{{ form.hidden_tag() }}
+
+			<p> Rate from 0 to 10 </p>
+			{{ wtf.form_field(form.rating) }}
+
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Rate</button>
+		</form>
+	</div>
+</div>
+
+
+{% endblock %}
