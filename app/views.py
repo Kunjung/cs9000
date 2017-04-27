@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request, session
 
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, PasswordField, BooleanField, IntegerField
 from wtforms.validators import InputRequired, Email, Length
 from flask_login import login_user, logout_user, login_required, current_user
@@ -23,7 +23,8 @@ class RegisterForm(FlaskForm):
 	email = StringField('Email', validators=[InputRequired(), Email(message='Invalid Email'), Length(max=42)])
 	username = StringField('Username', validators=[InputRequired(), Length(min=4, max=42)])
 	password = PasswordField('Password', validators=[InputRequired(), Length(min=4, max=42)])
-	
+	recaptcha = RecaptchaField()
+
 class PreferenceForm(FlaskForm):
 	comedy = IntegerField('Comedy', validators=[InputRequired()])
 	action = IntegerField('Action', validators=[InputRequired()])
