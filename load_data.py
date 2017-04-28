@@ -25,3 +25,4 @@ for d in df.values:
 # # k.rated.append(drstrange)
 
 db.session.commit()
+print("Done loading data")

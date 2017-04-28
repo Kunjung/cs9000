@@ -2,7 +2,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
 <div class="row">
-	<div class="col-xs-4 center-block">
+	<div class="col-xs-4 center-block small">
 		<form class="form-signin" method="POST" action="{{url_for('login')}}">
 			<h2 class="form-signin-heading">Login</h2>
 			{{ form.hidden_tag() }}

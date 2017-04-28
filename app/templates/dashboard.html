@@ -4,12 +4,12 @@
 	<h1> Hello, {{ username }} </h1>
 	<h4 style="text-align:center; color:red"> Here are Your Recommendations </h4>
 
-	<ul class="list-group list-inline">
+	<ul class="list-group list-inline small">
 	{% for movie in movies %}
 
 		<a href="{{ url_for('rate', movie_id=movie.id) }}">
 		<li class="list-group-item">
-			<p>{{ movie.name }}</p>
+			<p>{{ movie.name.capitalize() }}</p>
 			<img src="/static/images/{{ movie.name }}.jpg"/>
 		</li>
 		</a>

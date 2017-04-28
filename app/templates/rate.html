@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row">
 	<div class="col-xs-4 center-block">
-		<h2 class="form-signin-heading"> {{ movie.name }}</h2>
+		<h2 class="form-signin-heading"> {{ movie.name.capitalize() }}</h2>
 		<img src="/static/images/{{ movie.name }}.jpg"/>
 			
 		<form class="form-signin" action="{{ url_for('rate', movie_id=movie.id) }}" method="POST">

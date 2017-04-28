@@ -36,7 +36,7 @@ class RatingForm(FlaskForm):
 
 @app.route('/')
 def home():
-	movies = Movie.query.limit(10)
+	movies = Movie.query.limit(20)
 	return render_template('home.html', movies=movies)
 
 
@@ -93,7 +93,7 @@ def setpreferences():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-	movies = Movie.query.limit(10)
+	movies = Movie.query.limit(20)
 	return render_template('dashboard.html', username=current_user.username, movies=movies)
 
 
