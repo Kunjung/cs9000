@@ -7,10 +7,11 @@
 	<ul class="list-group list-inline small">
 	{% for movie in movies %}
 
-		<a href="{{ url_for('rate', movie_id=movie.id) }}">
+		<a href="{{ url_for('rate', movie_id=movie[0].id) }}">
 		<li class="list-group-item">
-			<p>{{ movie.name.capitalize() }}</p>
-			<img src="/static/images/{{ movie.name }}.jpg"/>
+			<p>{{ movie[0].name.capitalize() }}</p>
+			<img src="/static/images/{{ movie[0].name }}.jpg"/>
+			<p>Predicted Rating: {{ movie[1] }}</p>
 		</li>
 		</a>
 		

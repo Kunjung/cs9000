@@ -16,6 +16,9 @@ class Preference(db.Model):
 	romance = db.Column(db.Float)
 	scifi = db.Column(db.Float) 
 
+	def __repr__(self):
+		return '<Preference %r %r %r %r>' % (self.comedy, self.action, self.romance, self.scifi)
+
 class User(UserMixin, db.Model):
 	__tablename__ = 'users'
 	id = db.Column(db.Integer, primary_key=True)

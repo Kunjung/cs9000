@@ -8,6 +8,13 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db, login_manager
 from .models import *
 
+## Machine Learning 
+from .movie_ai import *
+import heapq
+
+COUNTER = 0
+EPOCHS = 20
+NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 9
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -86,20 +93,30 @@ def setpreferences():
 		db.session.add(prefer)
 		db.session.commit()
 		return redirect(url_for('dashboard'))
-
-	return render_template('setpreferences.html', form=form)
+	preference = Preference.query.filter_by(user_id = current_user.id).first()
+	return render_template('setpreferences.html', preference = preference, form=form)
 
 
 @app.route('/dashboard')
 @login_required
 def dashboard():
-	movies = Movie.query.limit(20)
+	### Get the BEST 10 predicted rated movies
+	movies = []
+	for movie in Movie.query.all():
+		predicted_rating = calculate_predicted_rating(current_user, movie) / 4 * 10
+		mr = (movie, predicted_rating)
+		movies.append(mr)
+	
+	movies = heapq.nlargest(10, movies, lambda mr: mr[1])
+
 	return render_template('dashboard.html', username=current_user.username, movies=movies)
 
 
 @app.route('/rate/<int:movie_id>', methods=['GET', 'POST'])
 @login_required
 def rate(movie_id):
+	global COUNTER
+
 	user_id = current_user.id
 	# get user's rating for this movie
 	form = RatingForm()
@@ -109,6 +126,16 @@ def rate(movie_id):
 		query = ratings.insert().values(user_id=user_id, movie_id=movie_id, rating=rating)
 		db.session.execute(query)
 		db.session.commit()
+
+		COUNTER = COUNTER + 1
+		### Perform Machine Learning if 10 ratings have been made
+		if COUNTER % NO_OF_RATINGS_TO_TRIGGER_ALGORITHM == 0:
+			for i in range(EPOCHS):
+				total_error = calculate_total_error()
+				update_all_user_preferences()
+
+			return '<h1>Machine Learning %s with error %s</h1>' % (str(COUNTER % 10), str(total_error)) 
+
 		return redirect(url_for('dashboard'))
 
 	movie = Movie.query.get(movie_id)
