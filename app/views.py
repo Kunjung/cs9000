@@ -85,10 +85,10 @@ def setpreferences():
 	if form.validate_on_submit():
 		user_id = current_user.id
 		
-		comedy = int(form.comedy.data) / 10
-		action = int(form.action.data) / 10
-		romance = int(form.romance.data) / 10
-		scifi = int(form.scifi.data) / 10
+		comedy = int(form.comedy.data) / 10.
+		action = int(form.action.data) / 10.
+		romance = int(form.romance.data) / 10.
+		scifi = int(form.scifi.data) / 10.
 		prefer = Preference(user_id=user_id, comedy=comedy, action=action, romance=romance, scifi=scifi)
 		db.session.add(prefer)
 		db.session.commit()
@@ -103,7 +103,7 @@ def dashboard():
 	### Get the BEST 10 predicted rated movies
 	movies = []
 	for movie in Movie.query.all():
-		predicted_rating = calculate_predicted_rating(current_user, movie) / 4 * 10
+		predicted_rating = calculate_predicted_rating(current_user, movie) / 4. * 10.
 		mr = (movie, predicted_rating)
 		movies.append(mr)
 	
