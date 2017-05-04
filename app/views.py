@@ -13,8 +13,8 @@ from .movie_ai import *
 import heapq
 
 COUNTER = 0
-EPOCHS = 20
-NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 9
+
+NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 5
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -130,9 +130,8 @@ def rate(movie_id):
 		COUNTER = COUNTER + 1
 		### Perform Machine Learning if 10 ratings have been made
 		if COUNTER % NO_OF_RATINGS_TO_TRIGGER_ALGORITHM == 0:
-			for i in range(EPOCHS):
-				total_error = calculate_total_error()
-				update_all_user_preferences()
+			total_error = calculate_total_error()
+			update_all_user_preferences()
 
 			return '<h1>Machine Learning %s with error %s</h1>' % (str(COUNTER % 10), str(total_error)) 
 

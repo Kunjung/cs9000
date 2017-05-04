@@ -1,6 +1,6 @@
 # Mid-course Happiness Score: 23
 from .models import *
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.00001
 
 def calculate_error(real_rating, predicted_rating):
 	error = (real_rating - predicted_rating) ** 2
@@ -46,24 +46,30 @@ def calculate_gradient_part(predicted_rating, real_rating, movie_feature):
 	return gradient
 
 def update_user_preferences(user):
+	EPOCHS = 30
 	preference = Preference.query.filter_by(user_id=user.id).first()
 	comedy, action, romance, scifi = preference.comedy, preference.action, preference.romance, preference.scifi
 	
 	for movie in user.rated:
 		predicted_rating = calculate_predicted_rating(user, movie)
 		real_rating = calculate_real_rating(user.id, movie.id)
-		# 1 - comedy
-		comedy = comedy - calculate_gradient_part(predicted_rating, real_rating, movie.comedy)
-		comedy = limit(comedy)
-		# 2 - action
-		action = action - calculate_gradient_part(predicted_rating, real_rating, movie.action)
-		action = limit(action)
-		# 3 - romance
-		romance = romance - calculate_gradient_part(predicted_rating, real_rating, movie.romance)
-		romance = limit(romance)
-		# 4 - scifi
-		scifi = scifi - calculate_gradient_part(predicted_rating, real_rating, movie.scifi)
-		scifi = limit(scifi)
+		
+		for i in range(EPOCHS):	
+			# 1 - comedy
+			comedy = comedy - calculate_gradient_part(predicted_rating, real_rating, movie.comedy)
+			comedy = limit(comedy)
+			# 2 - action
+			action = action - calculate_gradient_part(predicted_rating, real_rating, movie.action)
+			action = limit(action)
+			# 3 - romance
+			romance = romance - calculate_gradient_part(predicted_rating, real_rating, movie.romance)
+			romance = limit(romance)
+			# 4 - scifi
+			scifi = scifi - calculate_gradient_part(predicted_rating, real_rating, movie.scifi)
+			scifi = limit(scifi)
+
+			predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
+							(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
 
 	return comedy, action, romance, scifi
 	
@@ -77,6 +83,7 @@ def limit(val):
 
 
 def update_all_user_preferences():
+	
 	for user in User.query.all():
 		if user.rated:
 			comedy, action, romance, scifi = update_user_preferences(user)
