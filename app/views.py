@@ -103,7 +103,7 @@ def dashboard():
 	### Get the BEST 10 predicted rated movies
 	movies = []
 	for movie in Movie.query.all():
-		predicted_rating = calculate_predicted_rating(current_user, movie) / 4. * 10.
+		predicted_rating = calculate_predicted_rating(current_user, movie)
 		mr = (movie, predicted_rating)
 		movies.append(mr)
 	
