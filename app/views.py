@@ -107,7 +107,7 @@ def dashboard():
 		mr = (movie, predicted_rating)
 		movies.append(mr)
 	
-	movies = heapq.nlargest(10, movies, lambda mr: mr[1])
+	movies = heapq.nlargest(30, movies, lambda mr: mr[1])
 
 	return render_template('dashboard.html', username=current_user.username, movies=movies)
 
@@ -130,8 +130,8 @@ def rate(movie_id):
 		COUNTER = COUNTER + 1
 		### Perform Machine Learning if 10 ratings have been made
 		if COUNTER % NO_OF_RATINGS_TO_TRIGGER_ALGORITHM == 0:
-			total_error = calculate_total_error()
-			update_all_user_preferences()
+			update_user_preferences(current_user)
+			total_error = calculate_error_for_user(current_user)
 
 			return '<h1>Machine Learning %s with error %s</h1>' % (str(COUNTER % 10), str(total_error)) 
 

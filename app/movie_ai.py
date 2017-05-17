@@ -1,6 +1,6 @@
 # Mid-course Happiness Score: 23
 from .models import *
-LEARNING_RATE = 0.01
+LEARNING_RATE = 0.005
 
 def calculate_error(real_rating, predicted_rating):
 	error = (real_rating - predicted_rating) ** 2
@@ -54,21 +54,28 @@ def update_user_preferences(user):
 		predicted_rating = calculate_predicted_rating(user, movie)
 		real_rating = calculate_real_rating(user.id, movie.id)
 		
-		
-		# 1 - comedy
-		comedy = comedy - calculate_gradient_part(predicted_rating, real_rating, movie.comedy)
-		comedy = limit(comedy)
-		# 2 - action
-		action = action - calculate_gradient_part(predicted_rating, real_rating, movie.action)
-		action = limit(action)
-		# 3 - romance
-		romance = romance - calculate_gradient_part(predicted_rating, real_rating, movie.romance)
-		romance = limit(romance)
-		# 4 - scifi
-		scifi = scifi - calculate_gradient_part(predicted_rating, real_rating, movie.scifi)
-		scifi = limit(scifi)
+		for _ in range(50):
+			# 1 - comedy
+			comedy = comedy - calculate_gradient_part(predicted_rating, real_rating, movie.comedy)
+			comedy = limit(comedy)
+			# 2 - action
+			action = action - calculate_gradient_part(predicted_rating, real_rating, movie.action)
+			action = limit(action)
+			# 3 - romance
+			romance = romance - calculate_gradient_part(predicted_rating, real_rating, movie.romance)
+			romance = limit(romance)
+			# 4 - scifi
+			scifi = scifi - calculate_gradient_part(predicted_rating, real_rating, movie.scifi)
+			scifi = limit(scifi)
 
-	return comedy, action, romance, scifi
+			# Re-Calculate the predicted rating
+			predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
+							(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
+			
+			predicted_rating = predicted_rating / 4.0 * 10.0
+
+	preference.comedy, preference.action, preference.romance, preference.scifi =  comedy, action, romance, scifi
+	db.session.commit()
 	
 def limit(val):
 	if val < 0.0:
@@ -78,15 +85,5 @@ def limit(val):
 	else:
 		return val
 
-
-def update_all_user_preferences():
-	
-	for user in User.query.all():
-		if user.rated:
-			comedy, action, romance, scifi = update_user_preferences(user)
-			preference = Preference.query.filter_by(user_id=user.id).first()
-			preference.comedy, preference.action, preference.romance, preference.scifi = comedy, action, romance, scifi
-
-	db.session.commit()
 
 			
