@@ -14,16 +14,20 @@ def calculate_predicted_rating(user, movie):
 		return 0.0
 
 	else:
-		predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
-							(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
-		predicted_rating = predicted_rating / 4.0 * 10.0
+		#predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
+		#					(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
+		predicted_rating = comedy * movie.comedy + \
+						   action * movie.action + \
+						   romance * movie.romance + \
+						   scifi * movie.scifi
+
+		predicted_rating = predicted_rating / 4.0 * 5.0
 		return predicted_rating
 
 def calculate_real_rating(user_id, movie_id):
-	query = ratings.select('rating').where(user_id == user_id).where(movie_id == movie_id)
-	real_rating = db.session.execute(query)
-	real_rating = real_rating.first()
-	real_rating = real_rating[2]
+	query = ratings.select('rating').where(ratings.c.user_id==user_id).where(ratings.c.movie_id==movie_id)
+	values = db.session.execute(query).first()
+	real_rating = values[2]
 	return real_rating
 
 def calculate_error_for_user(user):
@@ -69,17 +73,18 @@ def update_user_preferences(user):
 			scifi = limit(scifi)
 
 			# Re-Calculate the predicted rating
-			predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
-							(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
-			
-			predicted_rating = predicted_rating / 4.0 * 10.0
+			predicted_rating = comedy * movie.comedy + \
+						   action * movie.action + \
+						   romance * movie.romance + \
+						   scifi * movie.scifi
 
+			predicted_rating = predicted_rating / 4.0 * 5.0
 	preference.comedy, preference.action, preference.romance, preference.scifi =  comedy, action, romance, scifi
 	db.session.commit()
 	
 def limit(val):
-	if val < 0.0:
-		return 0.0
+	if val < -1.0:
+		return -1.0
 	elif val > 1.0:
 		return 1.0
 	else:

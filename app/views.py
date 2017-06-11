@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, session
 
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, PasswordField, BooleanField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, IntegerField, FloatField
 from wtforms.validators import InputRequired, Email, Length
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -14,7 +14,7 @@ import heapq
 
 COUNTER = 0
 
-NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 5
+NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 2
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -33,10 +33,10 @@ class RegisterForm(FlaskForm):
 	recaptcha = RecaptchaField()
 
 class PreferenceForm(FlaskForm):
-	comedy = IntegerField('Comedy', validators=[InputRequired()])
-	action = IntegerField('Action', validators=[InputRequired()])
-	romance = IntegerField('Romance', validators=[InputRequired()])
-	scifi = IntegerField('Scifi', validators=[InputRequired()])
+	comedy = FloatField('Comedy', validators=[InputRequired()])
+	action = FloatField('Action', validators=[InputRequired()])
+	romance = FloatField('Romance', validators=[InputRequired()])
+	scifi = FloatField('Scifi', validators=[InputRequired()])
 
 class RatingForm(FlaskForm):
 	rating = IntegerField('Rating', validators=[InputRequired()])
@@ -84,13 +84,20 @@ def setpreferences():
 	form = PreferenceForm()
 	if form.validate_on_submit():
 		user_id = current_user.id
-		
-		comedy = int(form.comedy.data) / 10.
-		action = int(form.action.data) / 10.
-		romance = int(form.romance.data) / 10.
-		scifi = int(form.scifi.data) / 10.
-		prefer = Preference(user_id=user_id, comedy=comedy, action=action, romance=romance, scifi=scifi)
-		db.session.add(prefer)
+		preference = Preference.query.filter_by(user_id = current_user.id).first()
+	
+		comedy = float(form.comedy.data) / 5.
+		action = float(form.action.data) / 5.
+		romance = float(form.romance.data) / 5.
+		scifi = float(form.scifi.data) / 5.
+		if preference:
+			preference.comedy = comedy
+			preference.action = action
+			preference.romance = romance
+			preference.scifi = scifi
+		else:
+			preference = Preference(user_id=user_id, comedy=comedy, action=action, romance=romance, scifi=scifi)
+		db.session.add(preference)
 		db.session.commit()
 		return redirect(url_for('dashboard'))
 	preference = Preference.query.filter_by(user_id = current_user.id).first()

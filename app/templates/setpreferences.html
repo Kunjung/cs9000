@@ -6,15 +6,15 @@
 		<div class="small text-success">
 			{% if preference %}
 				<h3> Current Preferences </h3>
-				<p> Comedy: {{ preference.comedy * 10 }} </p>
-				<p> Action: {{ preference.action * 10 }} </p>
-				<p> Romance: {{ preference.romance * 10 }} </p>
-				<p> Scifi: {{ preference.scifi * 10 }} </p>
+				<p> Comedy: {{ preference.comedy * 5 }} </p>
+				<p> Action: {{ preference.action * 5 }} </p>
+				<p> Romance: {{ preference.romance * 5 }} </p>
+				<p> Scifi: {{ preference.scifi * 5 }} </p>
 			{% endif %}
 		</div>
 
 		<form class="form-signin" method="POST" action="{{url_for('setpreferences')}}">
-			<h2 class="form-signin-heading">Enter preference values from 0 to 10</h2>
+			<h2 class="form-signin-heading">Enter preference values from -5 to 5</h2>
 			{{ form.hidden_tag() }}
 			{{ wtf.form_field(form.comedy) }}
 			{{ wtf.form_field(form.action) }}

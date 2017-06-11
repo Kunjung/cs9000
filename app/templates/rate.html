@@ -9,7 +9,7 @@
 		<form class="form-signin" action="{{ url_for('rate', movie_id=movie.id) }}" method="POST">
 			{{ form.hidden_tag() }}
 
-			<p> Rate from 0 to 10 </p>
+			<p> Rate from -5 to 5 </p>
 			{{ wtf.form_field(form.rating) }}
 
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Rate</button>
