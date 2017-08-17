@@ -16,18 +16,12 @@
   <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Movie Recommender</a>
+      <a class="navbar-brand" href="{{url_for('home')}}">Movie Recommender</a>
     </div>
-    <center>
-    <ul class="nav navbar-nav">
-      <li><a href="{{url_for('home')}}">Home</a></li>
-      <li><a href="{{url_for('dashboard')}}">Dashboard</a></li>
-      <li><a href="{{url_for('setpreferences')}}">Set Preferences</a></li>
-    </ul>
 
     <form class="navbar-form navbar-left">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search">
+        <input type="text" class="form-control" placeholder="Search for Movies">
         <div class="input-group-btn">
           <button class="btn btn-default" type="submit">
             <i class="glyphicon glyphicon-search"></i>
@@ -35,6 +29,14 @@
         </div>
       </div>
     </form>
+
+    <center>
+    <ul class="nav navbar-nav">
+      <li><a href="{{url_for('home')}}">Home</a></li>
+      <li><a href="{{url_for('dashboard')}}">Dashboard</a></li>
+      <li><a href="{{url_for('setpreferences')}}">Set Preferences</a></li>
+    </ul>
+
 
     <ul class="nav navbar-nav navbar-right">
       <li><a href="{{url_for('signup')}}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -44,32 +46,10 @@
   </div>
 </nav>
 </div> <!-- jumbotron -->
-
-<!-- <div class="container">
-	<div class="jumbotron">
-		
-		<center>
-		<h1> Movie Recommender 1.0</h1>
-
-		<p>Get recommendations for the movies you like and save your time</p>
-
-		<a href="{{url_for('home')}}">Home</a>
-		....................
-		<a href="{{url_for('dashboard')}}">Dashboard</a>
-		....................
-		<a href="{{url_for('setpreferences')}}">Set Preferences</a>
-		....................
-		<a href="{{url_for('login')}}">Login</a>
-		....................
-		<a href="{{url_for('signup')}}">Signup</a>
-		
-		</center>
-	</div> -->
+</div> <!-- container -->
 
 {% block content %}
 {% endblock %}
 	
-</div> <!-- container -->
-
-
+	
 {% endblock %}
