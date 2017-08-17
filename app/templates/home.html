@@ -1,28 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fontawesome-stars-o.css') }}">
-    <script src="static/js/jquery-1.11.2.min.js"></script>
-    <script src="static/js/jquery.barrating.min.js"></script>
-    <script src="static/js/example.js"></script> -->
-   
 
-	<ul class="list-group list-inline">
-  
+<div class="row">
+	<ul class="list-group list-inline ">
 	{% for movie in movies %}
-    <!-- <div id="gridDiv" style="display: block;"> -->
 		<li class="list-group-item">
-      <div class="rw-ui-container"></div>
-        <div class="col col-fullwidth">
-          {{ movie.name.capitalize() }}
-
-        </div>
-
+			<p>{{ movie.name.capitalize() }}</p>
 			<img src="static/images/{{ movie.name }}.jpg"/>
-
 		</li>
-		<!-- </div> -->
+		
 	{% endfor %}
 	</ul>
+</div>
 <script type="text/javascript">(function(d, t, e, m){
     
     // Async Rating-Widget initialization.
