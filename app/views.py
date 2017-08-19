@@ -14,7 +14,7 @@ import heapq
 
 COUNTER = 0
 
-NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 2
+NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 5
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -138,9 +138,6 @@ def rate(movie_id):
 		### Perform Machine Learning if 10 ratings have been made
 		if COUNTER % NO_OF_RATINGS_TO_TRIGGER_ALGORITHM == 0:
 			update_user_preferences(current_user)
-			total_error = calculate_error_for_user(current_user)
-
-			return '<h1>Machine Learning %s with error %s</h1>' % (str(COUNTER % 10), str(total_error)) 
 
 		return redirect(url_for('dashboard'))
 
