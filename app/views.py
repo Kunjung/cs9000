@@ -196,13 +196,15 @@ def get_movies():
 @app.route('/api/signup', methods=['POST'])
 def mobile_signup():
 	if request.method == 'POST':
-		username = request.form['username']
-		password = request.form['password']
+		username = request.args.get('username')
+		password = request.args.get('password')
 		if username and password:
-			new_user = User(username, password)
-			db.session.add(new_user)
-			db.session.commit()
-			welcome = {'intro': 'Welcome to the Secret Project'}
-			return jsonify({'welcome': welcome}), 200
+			prev_user = User.query.filter_by(username=username).first()
+			if not prev_user:
+				new_user = User(username, password)
+				db.session.add(new_user)
+				db.session.commit()
+				welcome = {'intro': 'Welcome to the Secret Project'}
+				return jsonify({'welcome': welcome}), 200
 	error = {'intro': 'You wrong boy'}
-	return jsonify({'error': error}), 204
+	return jsonify({'error': error}), 400
