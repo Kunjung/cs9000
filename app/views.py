@@ -203,5 +203,6 @@ def signup():
 			db.session.add(new_user)
 			db.session.commit()
 			welcome = {'intro': 'Welcome to the Secret Project'}
-			return jsonify(welcome), 200
-	return jsonify({'fail': 'You did something wrong'}), 400
+			return jsonify({'welcome': welcome}), 200
+	error = {'intro': 'You wrong boy'}
+	return jsonify({'error': error}), 204
