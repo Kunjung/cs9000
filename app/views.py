@@ -11,6 +11,7 @@ from .models import *
 ## Machine Learning 
 from .movie_ai import *
 import heapq
+import random
 
 COUNTER = 0
 
@@ -85,10 +86,10 @@ def setpreferences():
 		user_id = current_user.id
 		preference = Preference.query.filter_by(user_id = current_user.id).first()
 	
-		comedy = float(form.comedy.data) / 5.
-		action = float(form.action.data) / 5.
-		romance = float(form.romance.data) / 5.
-		scifi = float(form.scifi.data) / 5.
+		comedy = float(form.comedy.data) / 5. or (random.random()*2-1)
+		action = float(form.action.data) / 5. or (random.random()*2-1)
+		romance = float(form.romance.data) / 5. or (random.random()*2-1)
+		scifi = float(form.scifi.data) / 5. or (random.random()*2-1)
 		if preference:
 			preference.comedy = comedy
 			preference.action = action
