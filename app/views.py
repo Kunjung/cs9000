@@ -157,21 +157,18 @@ def logout():
 ### JSON API STUFF #####
 #########################
 
-tasks = [
+movies = [
     {
-        'id': 1,
-        'title': u'Buy groceries',
-        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol', 
-        'done': False
+        'name': 'All esper dayo',
     },
     {
-        'id': 2,
-        'title': u'Learn Python',
-        'description': u'Need to find a good Python tutorial on the web', 
-        'done': False
+        'name': 'Dr Strange'
+    },
+    {
+        'name': 'Hell Boy'
     }
 ]
 
-@app.route('/api/tasks', methods=['GET'])
-def get_tasks():
-    return jsonify({'tasks': tasks})
+@app.route('/api/dashboard', methods=['GET'])
+def get_movies():
+    return jsonify({'movies': movies})
