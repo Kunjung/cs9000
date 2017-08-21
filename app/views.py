@@ -193,7 +193,7 @@ movies = [
 def get_movies():
 	return jsonify({'movies': movies})
 
-@app.route('/api/signup', methods=['POST'])
+@app.route('/api/signup', methods=['GET', 'POST'])
 def mobile_signup():
 	if request.method == 'POST':
 		username = request.args.get('username')
