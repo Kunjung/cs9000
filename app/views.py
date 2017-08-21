@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request, session, jsonify
 
-from flask_wtf import FlaskForm, RecaptchaField
+from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, IntegerField, FloatField
 from wtforms.validators import InputRequired, Email, Length
 from flask_login import login_user, logout_user, login_required, current_user
@@ -30,7 +30,6 @@ class RegisterForm(FlaskForm):
 	email = StringField('Email', validators=[InputRequired(), Email(message='Invalid Email'), Length(max=42)])
 	username = StringField('Username', validators=[InputRequired(), Length(min=4, max=42)])
 	password = PasswordField('Password', validators=[InputRequired(), Length(min=4, max=42)])
-	recaptcha = RecaptchaField()
 
 class PreferenceForm(FlaskForm):
 	comedy = FloatField('Comedy', validators=[InputRequired()])
@@ -192,4 +191,17 @@ movies = [
 
 @app.route('/api/dashboard', methods=['GET'])
 def get_movies():
-    return jsonify({'movies': movies})
+	return jsonify({'movies': movies})
+
+@app.route('/api/signup', methods=['POST'])
+def signup():
+	if request.method == 'POST':
+		username = request.form['username']
+		password = request.form['password']
+		if username and password:
+			new_user = User(username, password)
+			db.session.add(new_user)
+			db.session.commit()
+			welcome = {'intro': 'Welcome to the Secret Project'}
+			return jsonify(welcome), 200
+	return jsonify({'fail': 'You did something wrong'}), 400
