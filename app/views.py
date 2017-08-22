@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, session, jsonify
+from flask import render_template, redirect, url_for, request, session, jsonify, make_response
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, IntegerField, FloatField
@@ -11,11 +11,10 @@ from .models import *
 ## Machine Learning 
 from .movie_ai import *
 import heapq
-import random
 
 COUNTER = 0
 
-NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 5
+NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 2
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -86,10 +85,10 @@ def setpreferences():
 		user_id = current_user.id
 		preference = Preference.query.filter_by(user_id = current_user.id).first()
 	
-		comedy = float(form.comedy.data) / 5. or (random.random()*2-1)
-		action = float(form.action.data) / 5. or (random.random()*2-1)
-		romance = float(form.romance.data) / 5. or (random.random()*2-1)
-		scifi = float(form.scifi.data) / 5. or (random.random()*2-1)
+		comedy = float(form.comedy.data) / 5.
+		action = float(form.action.data) / 5.
+		romance = float(form.romance.data) / 5.
+		scifi = float(form.scifi.data) / 5.
 		if preference:
 			preference.comedy = comedy
 			preference.action = action
@@ -138,7 +137,7 @@ def rate(movie_id):
 		### Perform Machine Learning if 10 ratings have been made
 		if COUNTER % NO_OF_RATINGS_TO_TRIGGER_ALGORITHM == 0:
 			update_user_preferences(current_user)
-
+		
 		return redirect(url_for('dashboard'))
 
 	movie = Movie.query.get(movie_id)
@@ -150,8 +149,6 @@ def rate(movie_id):
 def logout():
 	logout_user()
 	return redirect(url_for('home'))
-
-
 
 #########################
 ### JSON API STUFF #####
@@ -194,18 +191,24 @@ movies = [
 def get_movies():
 	return jsonify({'movies': movies})
 
-@app.route('/api/signup', methods=['GET', 'POST'])
+@app.route('/api/signup', methods=['POST'])
 def mobile_signup():
-	if request.method == 'POST':
-		username = request.args.get('username')
-		password = request.args.get('password')
-		if username and password:
-			prev_user = User.query.filter_by(username=username).first()
-			if not prev_user:
-				new_user = User(username, password)
-				db.session.add(new_user)
-				db.session.commit()
-				welcome = {'intro': 'Welcome to the Secret Project'}
-				return jsonify({'welcome': welcome}), 200
-	error = {'intro': 'You wrong boy'}
-	return jsonify({'error': error}), 400
+	username = request.args.get('username')
+	password = request.args.get('password')
+	if username and password:
+		prev_user = User.query.filter_by(username=username).first()
+		if not prev_user:
+			new_user = User(username, password)
+			db.session.add(new_user)
+			db.session.commit()
+			return make_response(jsonify({'welcome': 'Welcome to the Secret Project'}), 201)
+	
+	return make_response(jsonify({'error': 'You wrong boy'}), 400)
+
+@app.route('/api/login', methods=['POST'])
+def mobile_login():
+	pass
+
+@app.route('/api/rate/<movie_id>', methods=['POST'])
+def mobile_rate():
+	pass
