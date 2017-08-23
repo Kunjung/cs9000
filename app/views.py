@@ -11,6 +11,7 @@ from .models import *
 ## Machine Learning 
 from .movie_ai import *
 import heapq
+import random
 
 COUNTER = 0
 
@@ -191,6 +192,9 @@ movies = [
 def get_movies():
 	return jsonify({'movies': movies})
 
+def random_preference():
+	return random.random() * 2 - 1
+
 @app.route('/api/signup', methods=['POST'])
 def mobile_signup():
 	username = request.args.get('username')
@@ -199,7 +203,13 @@ def mobile_signup():
 		prev_user = User.query.filter_by(username=username).first()
 		if not prev_user:
 			new_user = User(username, password)
+			comedy = random_preference()
+			action = random_preference()
+			romance = random_preference()
+			scifi = random_preference()
+			prefer = Preference(user_id=new_user.id, comedy=comedy, action=action, romance=romance, scifi=scifi)
 			db.session.add(new_user)
+			db.session.add(prefer)
 			db.session.commit()
 			return make_response(jsonify({'welcome': 'Welcome to the Secret Project'}), 201)
 	
@@ -207,8 +217,20 @@ def mobile_signup():
 
 @app.route('/api/login', methods=['POST'])
 def mobile_login():
-	pass
+	username = request.args.get('username')
+	password = request.args.get('password')
+	if username and password:
+		## check if there is a user
+		user = User.query.filter_by(username=username).first()
+		if user and user.password == password:
+			## login the user
 
-@app.route('/api/rate/<movie_id>', methods=['POST'])
-def mobile_rate():
-	pass
+	return make_response(jsonify({'error': 'Wrong username or password'}), 400)
+
+
+
+@app.route('/rate/<int:movie_id>', methods=['GET', 'POST'])
+def mobile_rate(movie_id):
+	
+	movie = Movie.query.get(movie_id)
+	return render_template('rate.html', movie=movie, form=form)
