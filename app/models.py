@@ -34,6 +34,7 @@ class User(UserMixin, db.Model):
 	def __repr__(self):
 		return '<User %r>' % self.username
 
+
 class Movie(db.Model):
 	__tablename__ = 'movies'
 	id = db.Column(db.Integer, primary_key=True)
@@ -54,6 +55,12 @@ class Movie(db.Model):
 	def __repr__(self):
 		return '<Movie %r>' % self.name
 
+	@property
+	def serialize(self):
+		return {
+			'name': self.name
+		}
+	
 # use this to update or get data from ratings table
 ######################
 # query = ratings.update().where(

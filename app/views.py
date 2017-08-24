@@ -227,7 +227,7 @@ def mobile_login():
 			movies = []
 			for movie in Movie.query.all():
 				predicted_rating = calculate_predicted_rating(user, movie)
-				mr = (movie, predicted_rating)
+				mr = (movie.serialize, predicted_rating)
 				movies.append(mr)
 			movies = heapq.nlargest(30, movies, lambda mr: mr[1])
 		
