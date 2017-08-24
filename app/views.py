@@ -41,6 +41,11 @@ class PreferenceForm(FlaskForm):
 class RatingForm(FlaskForm):
 	rating = IntegerField('Rating', validators=[InputRequired()])
 
+def random_preference():
+	choices = [-5., -4., -3., -2., -1., 0., 1., 2., 3., 4., 5.]
+	return random.choice(choices)
+
+
 @app.route('/')
 def home():
 	movies = Movie.query.limit(20)
@@ -199,8 +204,6 @@ def get_movies():
 	movies = [movie.serialize for movie in movies]
 	return jsonify({'movies': movies})
 
-def random_preference():
-	return random.random() * 2 - 1
 
 @app.route('/api/signup', methods=['POST'])
 def mobile_signup():
