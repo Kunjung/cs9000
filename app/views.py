@@ -224,7 +224,14 @@ def mobile_login():
 		if user and user.password == password:
 			## login the user 
 			## not really logging in, but giving some secret code or something or just dashboard page data 
-			return 
+			movies = []
+			for movie in Movie.query.all():
+				predicted_rating = calculate_predicted_rating(user, movie)
+				mr = (movie, predicted_rating)
+				movies.append(mr)
+			movies = heapq.nlargest(30, movies, lambda mr: mr[1])
+		
+			return jsonify({'movies': movies}),  200
 
 	return make_response(jsonify({'error': 'Wrong username or password'}), 400)
 
