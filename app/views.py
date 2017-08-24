@@ -75,10 +75,10 @@ def signup():
 		action = random_preference()
 		romance = random_preference()
 		scifi = random_preference()
+		db.session.add(new_user)
+		db.session.commit()
 		prefer = Preference(user_id=new_user.id, comedy=comedy, action=action, romance=romance, scifi=scifi)
 		db.session.add(prefer)
-		db.session.commit()
-		db.session.add(new_user)
 		db.session.commit()
 		login_user(new_user, remember=True)
 		return redirect(url_for('setpreferences'))
@@ -217,13 +217,13 @@ def mobile_signup():
 		prev_user = User.query.filter_by(username=username).first()
 		if not prev_user:
 			new_user = User(username, password)
+			db.session.add(new_user)
+			db.session.commit()
 			comedy = random.random() * 2 - 1
 			action = random.random() * 2 - 1
 			romance = random.random() * 2 - 1
 			scifi = random.random() * 2 - 1
 			prefer = Preference(user_id=new_user.id, comedy=comedy, action=action, romance=romance, scifi=scifi)
-			db.session.add(new_user)
-			db.session.commit()
 			db.session.add(prefer)
 			db.session.commit()
 			return make_response(jsonify({'welcome': 'Welcome to the Secret Project'}), 201)
