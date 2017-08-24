@@ -233,4 +233,4 @@ def mobile_login():
 @app.route('/api/rate/<int:movie_id>', methods=['GET', 'POST'])
 def mobile_rate(movie_id):
 	movie = Movie.query.get(movie_id)
-	return jsonify({'movie': 'movie.name'}), 200
+	return jsonify({'movie': movie.name}), 200
