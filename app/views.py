@@ -253,8 +253,8 @@ def mobile_login():
 
 
 
-@app.route('/rate/<int:movie_id>', methods=['GET', 'POST'])
+@app.route('/api/rate/<int:movie_id>', methods=['GET', 'POST'])
 def mobile_rate(movie_id):
 	
 	movie = Movie.query.get(movie_id)
-	return render_template('rate.html', movie=movie, form=form)
+	return jsonify({'movie': movie.serialize}), 200
