@@ -195,6 +195,8 @@ movies = [
 
 @app.route('/api/dashboard', methods=['GET'])
 def get_movies():
+	movies = Movie.query.limit(50)
+	movies = [movie.serialize for movie in movies]
 	return jsonify({'movies': movies})
 
 def random_preference():
