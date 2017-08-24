@@ -224,13 +224,13 @@ def mobile_login():
 		user = User.query.filter_by(username=username).first()
 		if user and user.password == password:
 			## login the user
+			return jsonify({'correct': 'Welcome'}), 200
 
 	return make_response(jsonify({'error': 'Wrong username or password'}), 400)
 
 
 
-@app.route('/rate/<int:movie_id>', methods=['GET', 'POST'])
+@app.route('/api/rate/<int:movie_id>', methods=['GET', 'POST'])
 def mobile_rate(movie_id):
-	
 	movie = Movie.query.get(movie_id)
-	return render_template('rate.html', movie=movie, form=form)
+	return jsonify({'movie': 'movie.name'}), 200
