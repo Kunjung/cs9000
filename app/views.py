@@ -77,6 +77,7 @@ def signup():
 		scifi = random_preference()
 		prefer = Preference(user_id=new_user.id, comedy=comedy, action=action, romance=romance, scifi=scifi)
 		db.session.add(prefer)
+		db.session.commit()
 		db.session.add(new_user)
 		db.session.commit()
 		login_user(new_user, remember=True)
@@ -219,6 +220,7 @@ def mobile_signup():
 			scifi = random.random() * 2 - 1
 			prefer = Preference(user_id=new_user.id, comedy=comedy, action=action, romance=romance, scifi=scifi)
 			db.session.add(new_user)
+			db.session.commit()
 			db.session.add(prefer)
 			db.session.commit()
 			return make_response(jsonify({'welcome': 'Welcome to the Secret Project'}), 201)
