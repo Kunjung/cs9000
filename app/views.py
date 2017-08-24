@@ -210,10 +210,10 @@ def mobile_signup():
 		prev_user = User.query.filter_by(username=username).first()
 		if not prev_user:
 			new_user = User(username, password)
-			comedy = random_preference()
-			action = random_preference()
-			romance = random_preference()
-			scifi = random_preference()
+			comedy = random.random() * 2 - 1
+			action = random.random() * 2 - 1
+			romance = random.random() * 2 - 1
+			scifi = random.random() * 2 - 1
 			prefer = Preference(user_id=new_user.id, comedy=comedy, action=action, romance=romance, scifi=scifi)
 			db.session.add(new_user)
 			db.session.add(prefer)
