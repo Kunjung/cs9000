@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, request, session, jsonify,
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, IntegerField, FloatField
-from wtforms.validators import InputRequired, Email, Length
+from wtforms.validators import InputRequired, Email, Length, NumberRange
 from flask_login import login_user, logout_user, login_required, current_user
 
 from app import app, db, login_manager
@@ -33,10 +33,10 @@ class RegisterForm(FlaskForm):
 	password = PasswordField('Password', validators=[InputRequired(), Length(min=4, max=42)])
 
 class PreferenceForm(FlaskForm):
-	comedy = FloatField('Comedy', validators=[InputRequired()])
-	action = FloatField('Action', validators=[InputRequired()])
-	romance = FloatField('Romance', validators=[InputRequired()])
-	scifi = FloatField('Scifi', validators=[InputRequired()])
+	comedy = FloatField('Comedy', validators=[InputRequired(), NumberRange(min=-5, max=5)])
+	action = FloatField('Action', validators=[InputRequired(), NumberRange(min=-5, max=5)])
+	romance = FloatField('Romance', validators=[InputRequired(), NumberRange(min=-5, max=5)])
+	scifi = FloatField('Scifi', validators=[InputRequired(), NumberRange(min=-5, max=5)])
 
 class RatingForm(FlaskForm):
 	rating = IntegerField('Rating', validators=[InputRequired()])
@@ -101,6 +101,9 @@ def setpreferences():
 		action = float(form.action.data) / 5.
 		romance = float(form.romance.data) / 5.
 		scifi = float(form.scifi.data) / 5.
+
+		comedy, action, romance, scifi = limit(comedy), limit(action), limit(romance), limit(scifi)
+
 		if preference:
 			preference.comedy = comedy
 			preference.action = action
