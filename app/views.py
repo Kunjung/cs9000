@@ -57,8 +57,7 @@ def login():
 			if user.password == form.password.data:
 				login_user(user, remember=form.remember.data)
 				return redirect(url_for('dashboard'))
-		return '<h1> Wrong username or password </h1>'
-
+	
 	return render_template('login.html', form=form)
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -223,14 +222,16 @@ def mobile_login():
 		## check if there is a user
 		user = User.query.filter_by(username=username).first()
 		if user and user.password == password:
-			## login the user
-			return jsonify({'correct': 'Welcome'}), 200
+			## login the user 
+			## not really logging in, but giving some secret code or something or just dashboard page data 
+			return 
 
 	return make_response(jsonify({'error': 'Wrong username or password'}), 400)
 
 
 
-@app.route('/api/rate/<int:movie_id>', methods=['GET', 'POST'])
+@app.route('/rate/<int:movie_id>', methods=['GET', 'POST'])
 def mobile_rate(movie_id):
+	
 	movie = Movie.query.get(movie_id)
-	return jsonify({'movie': movie.name}), 200
+	return render_template('rate.html', movie=movie, form=form)
