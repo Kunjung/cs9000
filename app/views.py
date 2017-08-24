@@ -230,7 +230,7 @@ def mobile_signup():
 	
 	return make_response(jsonify({'error': 'You wrong boy'}), 400)
 
-@app.route('/api/login', methods=['POST'])
+@app.route('/api/login', methods=['GET'])
 def mobile_login():
 	username = request.args.get('username')
 	password = request.args.get('password')
