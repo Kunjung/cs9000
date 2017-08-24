@@ -66,6 +66,12 @@ def signup():
 
 	if form.validate_on_submit():
 		new_user = User(form.username.data, form.password.data)
+		comedy = random_preference()
+		action = random_preference()
+		romance = random_preference()
+		scifi = random_preference()
+		prefer = Preference(user_id=new_user.id, comedy=comedy, action=action, romance=romance, scifi=scifi)
+		db.session.add(prefer)
 		db.session.add(new_user)
 		db.session.commit()
 		login_user(new_user, remember=True)
