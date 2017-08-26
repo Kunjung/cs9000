@@ -1,6 +1,6 @@
 # Mid-course Happiness Score: 23
 from .models import *
-LEARNING_RATE = 0.005
+LEARNING_RATE = 0.05
 
 def calculate_error(real_rating, predicted_rating):
 	error = (real_rating - predicted_rating) ** 2
