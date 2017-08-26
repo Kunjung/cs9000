@@ -2,11 +2,17 @@
 {% block content %}
 	
 
-	<ul class="list-group list-inline ">
+	<ul class="list-group">
 	{% for movie in movies %}
-		<li class="list-group-item">
-			<p>{{ movie.name.capitalize() }}</p>
-			<img src="static/images/{{ movie.name }}.jpg"/>
+		<li class="list-group-item list-inline small">
+			<h3 style="text-align:center; color:blue">{{ movie[0].name.capitalize() }}</h3>
+			<!--
+			<a href="{{ 'http://www.imdb.com/title/tt' + movie[0].imdb_id|string() }}">
+				Imdb Page
+			</a>
+			-->
+			<img src="{{ movie[1] }} "/>
+			<p> {{ movie[2] }} </p>
 		</li>
 		
 	{% endfor %}

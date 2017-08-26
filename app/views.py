@@ -12,10 +12,15 @@ from .models import *
 from .movie_ai import *
 import heapq
 import random
+from urllib import request
+from bs4 import BeautifulSoup
 
 COUNTER = 0
 
 NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 2
+NUM_OF_MOVIES_TO_USE = 1000
+NUM_OF_MOVIES_TO_RECOMMEND = 3
+IMDB_URL_STRING = 'http://www.imdb.com/title/tt'
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -45,11 +50,25 @@ def random_preference():
 	choices = [-5., -4., -3., -2., -1., 0., 1., 2., 3., 4., 5.]
 	return random.choice(choices)
 
+def get_poster_and_description(imdb_id):
+	url = IMDB_URL_STRING + str(imdb_id)
+	soup = BeautifulSoup(request.urlopen(url).read(), "lxml")
+	image_link = soup.find(itemprop="image")
+	description = soup.find(itemprop="description").text
+	return image_link.get("src"), description
 
 @app.route('/')
 def home():
-	movies = Movie.query.limit(20)
-	return render_template('home.html', movies=movies)
+	movies = Movie.query.limit(NUM_OF_MOVIES_TO_RECOMMEND)
+	### Get the images link
+	movies_with_poster_images = []
+	for movie in movies:
+		imdb_id = movie.imdb_id
+		image_link, description = get_poster_and_description(imdb_id)
+		movie_with_image = (movie, image_link, description)
+		movies_with_poster_images.append(movie_with_image)
+
+	return render_template('home.html', movies=movies_with_poster_images)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -76,7 +95,6 @@ def signup():
 		romance = random_preference()
 		scifi = random_preference()
 		db.session.add(new_user)
-		db.session.commit()
 		prefer = Preference(user_id=new_user.id, comedy=comedy, action=action, romance=romance, scifi=scifi)
 		db.session.add(prefer)
 		db.session.commit()
@@ -123,14 +141,22 @@ def setpreferences():
 def dashboard():
 	### Get the BEST 10 predicted rated movies
 	movies = []
-	for movie in Movie.query.all():
+	for movie in Movie.query.limit(NUM_OF_MOVIES_TO_USE):
 		predicted_rating = calculate_predicted_rating(current_user, movie)
 		mr = (movie, predicted_rating)
 		movies.append(mr)
 	
-	movies = heapq.nlargest(30, movies, lambda mr: mr[1])
+	movies = heapq.nlargest(NUM_OF_MOVIES_TO_RECOMMEND, movies, lambda mr: mr[1])
+	### Get the images link
+	movies_with_poster_images = []
+	for mr in movies:
+		movie = mr[0]
+		imdb_id = movie.imdb_id
+		image_link, description = get_poster_and_description(imdb_id)
+		mr_with_image = mr + (image_link, description)
+		movies_with_poster_images.append(mr_with_image)
 
-	return render_template('dashboard.html', username=current_user.username, movies=movies)
+	return render_template('dashboard.html', username=current_user.username, movies=movies_with_poster_images)
 
 
 @app.route('/rate/<int:movie_id>', methods=['GET', 'POST'])

@@ -34,18 +34,28 @@ class User(UserMixin, db.Model):
 	def __repr__(self):
 		return '<User %r>' % self.username
 
+# class Imdb(db.Model):
+# 	__tablename__ = 'imdb'
+# 	id = db.Column(db.Integer, primary_key=True)
+# 	movie_id = db.Column(db.Integer, unique=True)
+# 	imdb_id = db.Column(db.Integer, unique=True)
+
+# 	def __repr__(self):
+# 		return '<Imdb %r %r>' % (self.movie_id, self.imdb_id)
 
 class Movie(db.Model):
 	__tablename__ = 'movies'
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(42), unique=True)
+	movie_id = db.Column(db.Integer, unique=True)
+	name = db.Column(db.String(42))
 	comedy = db.Column(db.Float)
 	action = db.Column(db.Float)
 	romance = db.Column(db.Float)
-	scifi = db.Column(db.Float) 
+	scifi = db.Column(db.Float)
+	imdb_id = db.Column(db.Integer, unique=True)
 
-
-	def __init__(self, name, comedy, action, romance, scifi):
+	def __init__(self, movie_id, name, comedy, action, romance, scifi):
+		self.movie_id = movie_id
 		self.name = name
 		self.comedy = comedy
 		self.action = action
