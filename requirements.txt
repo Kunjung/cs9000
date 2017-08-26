@@ -6,3 +6,4 @@ Flask-SQLAlchemy==2.1
 Flask-Bootstrap
 Flask-Login
 Flask-WTF
+bs4
