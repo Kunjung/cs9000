@@ -14,12 +14,12 @@ def calculate_predicted_rating(user, movie):
 		return 0.0
 
 	else:
-		#predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
-		#					(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
-		predicted_rating = comedy * movie.comedy + \
-						   action * movie.action + \
-						   romance * movie.romance + \
-						   scifi * movie.scifi
+		predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
+							(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
+		# predicted_rating = comedy * movie.comedy + \
+		# 				   action * movie.action + \
+		# 				   romance * movie.romance + \
+		# 				   scifi * movie.scifi
 
 		predicted_rating = predicted_rating / 4.0 * 5.0
 		return predicted_rating
@@ -73,10 +73,13 @@ def update_user_preferences(user):
 			scifi = limit(scifi)
 
 			# Re-Calculate the predicted rating
-			predicted_rating = comedy * movie.comedy + \
-						   action * movie.action + \
-						   romance * movie.romance + \
-						   scifi * movie.scifi
+			# predicted_rating = comedy * movie.comedy + \
+			# 			   action * movie.action + \
+			# 			   romance * movie.romance + \
+			# 			   scifi * movie.scifi
+
+			predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
+					(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
 
 			predicted_rating = predicted_rating / 4.0 * 5.0
 	preference.comedy, preference.action, preference.romance, preference.scifi =  comedy, action, romance, scifi
