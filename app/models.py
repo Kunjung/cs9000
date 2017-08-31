@@ -68,7 +68,8 @@ class Movie(db.Model):
 	@property
 	def serialize(self):
 		return {
-			'name': self.name
+			'name': self.name,
+			'id': self.id
 		}
 	
 # use this to update or get data from ratings table

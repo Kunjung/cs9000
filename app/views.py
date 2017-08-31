@@ -322,4 +322,6 @@ def mobile_login():
 def mobile_rate(movie_id):
 	
 	movie = Movie.query.get(movie_id)
+	if not movie:
+		return jsonify({'error': 'Not here'}), 400
 	return jsonify({'movie': movie.serialize}), 200
