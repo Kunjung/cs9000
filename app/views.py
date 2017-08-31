@@ -19,8 +19,13 @@ COUNTER = 0
 
 NO_OF_RATINGS_TO_TRIGGER_ALGORITHM = 2
 NUM_OF_MOVIES_TO_USE = 1000
-NUM_OF_MOVIES_TO_RECOMMEND = 10
+NUM_OF_MOVIES_TO_RECOMMEND = 3
 IMDB_URL_STRING = 'http://www.imdb.com/title/tt'
+
+####################
+######## Add an algorithm to update the movie features as well but with small learning rate
+######## Maybe add a threshold that only after 5 or 10 users have rated it, do you update that movie's features
+####################
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -57,6 +62,35 @@ def get_poster_and_description(imdb_id):
 	description = soup.find(itemprop="description").text
 	return image_link.get("src"), description
 
+def get_avg_predicted_rating(user, movies):
+	avg_predicted_rating = 0
+	count = 0
+	for movie in movies:
+		count = count + 1
+		predicted_rating = calculate_predicted_rating(user, movie[0])
+		avg_predicted_rating += predicted_rating
+
+	avg_predicted_rating = avg_predicted_rating / count
+	return avg_predicted_rating
+
+@app.route('/graph')
+@login_required
+def graph():
+	avg_rating_string = ""
+	movie_numbers = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+	for number in movie_numbers:
+		movies = []
+		for movie in Movie.query.limit(number):
+			predicted_rating = calculate_predicted_rating(current_user, movie)
+			mr = (movie, predicted_rating)
+			movies.append(mr)
+
+		movies = heapq.nlargest(NUM_OF_MOVIES_TO_RECOMMEND, movies, lambda mr: mr[1])
+		avg_rating = get_avg_predicted_rating(current_user, movies)
+		avg_rating_string += str(avg_rating) + ", "
+	return avg_rating_string
+	
+
 @app.route('/')
 def home():
 	movies = Movie.query.limit(NUM_OF_MOVIES_TO_RECOMMEND)
@@ -89,6 +123,9 @@ def signup():
 	form = RegisterForm()
 
 	if form.validate_on_submit():
+		prev_user = User.query.filter_by(username=form.username.data).first()
+		if prev_user:
+			return render_temmplate('signup.html', form=form)
 		new_user = User(form.username.data, form.password.data)
 		comedy = random_preference()
 		action = random_preference()
@@ -134,6 +171,8 @@ def setpreferences():
 		return redirect(url_for('dashboard'))
 	preference = Preference.query.filter_by(user_id = current_user.id).first()
 	return render_template('setpreferences.html', preference = preference, form=form)
+
+
 
 
 @app.route('/dashboard')
@@ -235,7 +274,7 @@ def get_movies():
 	return jsonify({'movies': movies})
 
 
-@app.route('/api/signup', methods=['POST'])
+@app.route('/api/signup', methods=['GET'])
 def mobile_signup():
 	username = request.args.get('username')
 	password = request.args.get('password')
