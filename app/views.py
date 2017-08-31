@@ -12,7 +12,7 @@ from .models import *
 from .movie_ai import *
 import heapq
 import random
-from urllib import request
+import urlib.request
 from bs4 import BeautifulSoup
 
 COUNTER = 0
@@ -57,7 +57,7 @@ def random_preference():
 
 def get_poster_and_description(imdb_id):
 	url = IMDB_URL_STRING + str(imdb_id)
-	soup = BeautifulSoup(request.urlopen(url).read(), "lxml")
+	soup = BeautifulSoup(urlib.request.urlopen(url).read(), "lxml")
 	image_link = soup.find(itemprop="image")
 	description = soup.find(itemprop="description").text
 	return image_link.get("src"), description
