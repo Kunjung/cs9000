@@ -318,10 +318,23 @@ def mobile_login():
 
 
 
-@app.route('/api/rate/<int:movie_id>', methods=['GET', 'POST'])
-def mobile_rate(movie_id):
+@app.route('/api/movie/<int:movie_id>', methods=['GET', 'POST'])
+def mobile_movie(movie_id):
 	
 	movie = Movie.query.get(movie_id)
 	if not movie:
 		return jsonify({'error': 'Not here'}), 400
 	return jsonify({'movie': movie.serialize}), 200
+
+
+
+@app.route('/api/rate')
+def mobile_rate():
+	movie_id = request.args.get('movie_id')
+	user_id = request.args.get('user_id')
+	rating = request.args.get('rating')
+
+	query = ratings.insert().values(user_id=user_id, movie_id=movie_id, rating=rating)
+	db.session.execute(query)
+	db.session.commit()
+	return jsonify({'done': 'complete'}, 201)
