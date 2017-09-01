@@ -312,7 +312,7 @@ def mobile_login():
 				movies.append(mr)
 			movies = heapq.nlargest(30, movies, lambda mr: mr[1])
 		
-			return jsonify({'movies': movies}),  200
+			return jsonify({'movies': movies, 'user_id': user.id}),  200
 
 	return make_response(jsonify({'error': 'Wrong username or password'}), 400)
 
@@ -338,3 +338,4 @@ def mobile_rate():
 	db.session.execute(query)
 	db.session.commit()
 	return jsonify({'done': 'complete'}), 201
+
