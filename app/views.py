@@ -337,4 +337,4 @@ def mobile_rate():
 	query = ratings.insert().values(user_id=user_id, movie_id=movie_id, rating=rating)
 	db.session.execute(query)
 	db.session.commit()
-	return jsonify({'done': 'complete'}, 201)
+	return jsonify({'done': 'complete'}), 201
