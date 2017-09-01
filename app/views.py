@@ -8,6 +8,8 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db, login_manager
 from .models import *
 
+from flask_sqlalchemy import desc
+
 ## Machine Learning 
 from .movie_ai import *
 import heapq
@@ -180,7 +182,7 @@ def setpreferences():
 def dashboard():
 	### Get the BEST 10 predicted rated movies
 	movies = []
-	for movie in Movie.query.limit(NUM_OF_MOVIES_TO_USE):
+	for movie in Movie.query.order_by(desc(Movie.id)).limit(NUM_OF_MOVIES_TO_USE):
 		predicted_rating = calculate_predicted_rating(current_user, movie)
 		mr = (movie, predicted_rating)
 		movies.append(mr)
@@ -306,7 +308,7 @@ def mobile_login():
 			## login the user 
 			## not really logging in, but giving some secret code or something or just dashboard page data 
 			movies = []
-			for movie in Movie.query.all():
+			for movie in Movie.query.order_by(desc(Movie.id)).limit(NUM_OF_MOVIES_TO_USE):
 				predicted_rating = calculate_predicted_rating(user, movie)
 				mr = (movie.serialize, predicted_rating)
 				movies.append(mr)
