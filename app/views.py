@@ -339,3 +339,18 @@ def mobile_rate():
 	db.session.commit()
 	return jsonify({'done': 'complete'}), 201
 
+
+
+@app.route('/api/checkrating')
+def check_rating():
+	movie_id = request.args.get('movie_id')
+	user_id = request.args.get('user_id')
+	query = ratings.select('rating').where(ratings.c.user_id==user_id).where(ratings.c.movie_id==movie_id)
+	values = db.session.execute(query).first()
+	real_rating = 0
+	try:
+		real_rating = values[2]
+	except:
+		return jsonify({'error': 'doesnt exist'}), 400
+	
+	return jsonify({'rating': real_rating}), 200
