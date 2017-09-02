@@ -5,9 +5,11 @@ var maxPopulation;
 var bestPhrase;
 
 function setup() {
-  var canvas = createCanvas(600, 400);
-  canvas.parent("#movieHeading");
-  target = "Saving Your Time";
+  noCanvas();
+  bestPhrase = select("#movieHeading");
+  //var canvas = createCanvas(600, 400);
+  //canvas.parent("#movieHeading");
+  target = "Movie Recommender";
   mutationRate = 0.002;
   maxPopulation = 300;
   population = new Population(target, mutationRate, maxPopulation);
@@ -34,10 +36,10 @@ function draw() {
 
 function displayInfo() {
   var best = population.getBest();
-  //bestPhrase.html(best);
-  textAlign(LEFT);
-  fill(240, 50, 240);
-  textSize(24);
-  text(best, width/2 - width/3, height/2)
+  bestPhrase.html(best);
+  // textAlign(LEFT);
+  // fill(240, 50, 240);
+  // textSize(24);
+  // text(best, width/2 - width/3, height/2)
 }
 
