@@ -33,7 +33,7 @@ function draw() {
 }
 
 function displayInfo() {
-  //var best = population.getBest();
+  var best = population.getBest();
   //bestPhrase.html(best);
   textAlign(LEFT);
   fill(240, 50, 240);
