@@ -3,7 +3,9 @@
 	<title>Movie Recommender</title>
 	{{ super() }}
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"> 
-
+  	<!-- Main Stylesheet File -->
+  	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> 
+ 
     <meta charset="UTF-8">
 
     <script src="{{ url_for('static', filename = 'js/libraries/p5.js') }}" type="text/javascript"></script>
@@ -21,32 +23,40 @@
 
 
 {% block body %}
-<div class="container">
-	<div class="jumbotron">
-		
-		<center>
-		
-		<p id="movieHeading" style="font-size:400%; font-weight:bold">  </p>
+<!--==========================
+  Header Section
+============================-->
+  <header id="header">
+    <div class="container">
 
 
-		<p>Get recommendations for the movies you like and save your time</p>
+    	<div id="logo" class="pull-left">
+        	<a href="#hero">
+        		<p id="movieHeading" style="font-size:240%; font-weight:bold; color:white; display:inline-block">   </p> 
+        	</a>
+        </div>
+    
 
-		<a href="{{url_for('home')}}">Home</a>
-		....................
-		<a href="{{url_for('dashboard')}}">Dashboard</a>
-		....................
-		<a href="{{url_for('setpreferences')}}">Set Preferences</a>
-		....................
-		<a href="{{url_for('login')}}">Login</a>
-		....................
-		<a href="{{url_for('signup')}}">Signup</a>
-		
-		</center>
-	</div>
+      <nav id="nav-menu-container">
+        <ul class="nav-menu">
+          <li class="menu-active"><a href="#hero">Home</a></li>
+          <li><a href="{{ url_for('about') }}">About Us</a></li>
+          <li><a href="{{ url_for('setpreferences') }}">Set Your Preferences</a></li>
+          <li><a href="{{ url_for('dashboard') }}">Your Recommendations</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+      </nav><!-- #nav-menu-container -->
+    </div>
+  </header><!-- #header -->
 
 
-	{% block content %}
-	{% endblock %}
 
-</div>
+
+{% block content %}
+{% endblock %}
+
+
+
+
 {% endblock %}

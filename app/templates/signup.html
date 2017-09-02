@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
-<div class="row">
+<div class="row text-center">
 	<div class="col-xs-4 center-block small">
 		<form class="form-signin" method="POST" action="{{url_for('signup')}}">
 			<h2 class="form-signin-heading">Signup</h2>
@@ -13,6 +13,5 @@
 		</form>
 	</div>
 </div>
-
 
 {% endblock %}
