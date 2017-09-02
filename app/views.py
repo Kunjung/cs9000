@@ -94,6 +94,10 @@ def graph():
 	
 
 @app.route('/')
+def index():
+	return render_template('index.html')
+
+@app.route('/home')
 def home():
 	movies = Movie.query.limit(NUM_OF_MOVIES_TO_RECOMMEND)
 	### Get the images link
@@ -105,6 +109,7 @@ def home():
 		movies_with_poster_images.append(movie_with_image)
 
 	return render_template('home.html', movies=movies_with_poster_images)
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -142,9 +147,9 @@ def signup():
 
 	return render_template('signup.html', form=form)
 
-@app.route('/secret')	
-def secret():
-	return render_template('secret.html')
+@app.route('/about')	
+def about():
+	return render_template('about.html')
 	
 @app.route('/setpreferences', methods=['POST', 'GET'])
 @login_required
@@ -230,7 +235,7 @@ def rate(movie_id):
 @login_required
 def logout():
 	logout_user()
-	return redirect(url_for('home'))
+	return redirect(url_for('index'))
 
 #########################
 ### JSON API STUFF #####
