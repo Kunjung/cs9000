@@ -11,7 +11,7 @@ function setup() {
   //canvas.parent("#movieHeading");
   target = "Movie Recommender";
   mutationRate = 0.002;
-  maxPopulation = 300;
+  maxPopulation = 350;
   population = new Population(target, mutationRate, maxPopulation);
 }
 
