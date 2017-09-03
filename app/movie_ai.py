@@ -1,6 +1,6 @@
 # Mid-course Happiness Score: 23
 from .models import *
-LEARNING_RATE = 0.05
+LEARNING_RATE = 0.1
 
 def calculate_error(real_rating, predicted_rating):
 	error = (real_rating - predicted_rating) ** 2
@@ -47,7 +47,6 @@ def calculate_total_error():
 
 def calculate_gradient_part(predicted_rating, real_rating, movie_feature):
 	gradient = (predicted_rating - real_rating) * movie_feature
-	gradient = gradient * LEARNING_RATE
 	return gradient
 
 def update_user_preferences(user):
@@ -58,19 +57,22 @@ def update_user_preferences(user):
 		predicted_rating = calculate_predicted_rating(user, movie)
 		real_rating = calculate_real_rating(user.id, movie.id)
 		
+		alpha = LEARNING_RATE
 		for _ in range(50):
 			# 1 - comedy
-			comedy = comedy - calculate_gradient_part(predicted_rating, real_rating, movie.comedy)
+			comedy = comedy - alpha * calculate_gradient_part(predicted_rating, real_rating, movie.comedy)
 			comedy = limit(comedy)
 			# 2 - action
-			action = action - calculate_gradient_part(predicted_rating, real_rating, movie.action)
+			action = action - alpha * calculate_gradient_part(predicted_rating, real_rating, movie.action)
 			action = limit(action)
 			# 3 - romance
-			romance = romance - calculate_gradient_part(predicted_rating, real_rating, movie.romance)
+			romance = romance - alpha * calculate_gradient_part(predicted_rating, real_rating, movie.romance)
 			romance = limit(romance)
 			# 4 - scifi
-			scifi = scifi - calculate_gradient_part(predicted_rating, real_rating, movie.scifi)
+			scifi = scifi - alpha * calculate_gradient_part(predicted_rating, real_rating, movie.scifi)
 			scifi = limit(scifi)
+
+			alpha = alpha - 0.005
 
 			# Re-Calculate the predicted rating
 			# predicted_rating = comedy * movie.comedy + \
