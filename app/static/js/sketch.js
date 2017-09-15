@@ -35,7 +35,7 @@ function draw() {
 
 function displayInfo() {
   var best = population.getBest();
-  bestPhrase.html(best);
+  bestPhrase.html("Movie " + best);
   // textAlign(LEFT);
   // fill(240, 50, 240);
   // textSize(24);
