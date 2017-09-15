@@ -27,7 +27,7 @@ function draw() {
   
   displayInfo();
   
-  if (population.isFinished()) {
+  if (population.getBest() == target) {
     noLoop();
   }  
   
