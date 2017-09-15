@@ -8,7 +8,7 @@ function newChar() {
 
 function DNA(num) {
   this.genes = [];
-  this.fitness = 0;
+  this.fitness = 0.0;
   for (var i = 0; i < num; i++) {
     this.genes[i] = newChar();
   }
@@ -18,10 +18,10 @@ function DNA(num) {
   }
   
   this.calcFitness = function(target) {
-    var score = 0;
+    var score = 0.0;
     for (var i = 0; i < this.genes.length; i++) {
       if (this.genes[i] == target.charAt(i)) {
-        score++;
+        score = score + 1;
       }
     }
     this.fitness = score / target.length;

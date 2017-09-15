@@ -10,8 +10,8 @@ function setup() {
   //var canvas = createCanvas(600, 400);
   //canvas.parent("#movieHeading");
   target = "Movie Recommender";
-  mutationRate = 0.002;
-  maxPopulation = 350;
+  mutationRate = 0.001;
+  maxPopulation = 370;
   population = new Population(target, mutationRate, maxPopulation);
 }
 
