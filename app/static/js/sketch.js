@@ -9,7 +9,7 @@ function setup() {
   bestPhrase = select("#movieHeading");
   //var canvas = createCanvas(600, 400);
   //canvas.parent("#movieHeading");
-  target = "Movie Recommender";
+  target = "Recommender";
   mutationRate = 0.002;
   maxPopulation = 350;
   population = new Population(target, mutationRate, maxPopulation);
