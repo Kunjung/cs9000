@@ -19,9 +19,6 @@ function draw() {
   
   background(100);
   
-  if (population.isFinished()) {
-    noLoop();
-  }
   population.calcFitness();
   
   population.createMatingPool();
@@ -30,7 +27,9 @@ function draw() {
   
   displayInfo();
   
-  
+  if (population.isFinished()) {
+    noLoop();
+  }  
   
 }
 
