@@ -3,20 +3,7 @@
 	<title>Movie Recommender</title>
 	{{ super() }}
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"> 
-  	<!-- Main Stylesheet File -->
-  	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> 
- 
-    <meta charset="UTF-8">
-
-    <script src="{{ url_for('static', filename = 'js/libraries/p5.js') }}" type="text/javascript"></script>
-    <script src="{{ url_for('static', filename = 'js/libraries/p5.dom.js') }}" type="text/javascript"></script>
-    <script src="{{ url_for('static', filename = 'js/libraries/p5.sound.js') }}" type="text/javascript"></script>
-
-    <script src="{{ url_for('static', filename = 'js/sketch.js') }}" type="text/javascript"></script>
-    <script src="{{ url_for('static', filename = 'js/Population.js') }}" type="text/javascript"></script>
-    <script src="{{ url_for('static', filename = 'js/DNA.js') }}" type="text/javascript"></script>
-
-    <style> body {padding: 0; margin: 0;} canvas {vertical-align: top;} </style>
+  	
  
 {% endblock %}
 
@@ -30,8 +17,8 @@
     <div class="container">
 
     	<div id="logo" class="pull-left">
-        	<a href="{{ url_for('index') }}">
-        		<p id="movieHeading" style="font-size:180%; font-weight:bold; color:white; display:inline-block">   </p> 
+        	<a href="#hero">
+        		<p id="movieHeading" style="font-size:180%; font-weight:bold; color:white; display:inline-block">Movie Recommender</p> 
         	</a>
         </div>
 
@@ -41,7 +28,7 @@
           <li><a href="{{ url_for('about') }}">About Us</a></li>
           <li><a href="{{ url_for('setpreferences') }}">Set Your Preferences</a></li>
           <li><a href="{{ url_for('dashboard') }}">Your Recommendations</a></li>
-          <li><a href="#team">Team</a></li>
+          
           <li><a href="{{ url_for('logout') }}">Logout</a></li>
         </ul>
       </nav><!-- #nav-menu-container -->
