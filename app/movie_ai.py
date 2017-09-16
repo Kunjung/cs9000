@@ -14,12 +14,12 @@ def calculate_predicted_rating(user, movie):
 		return 0.0
 
 	else:
-		predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
-							(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
-		# predicted_rating = comedy * movie.comedy + \
-		# 				   action * movie.action + \
-		# 				   romance * movie.romance + \
-		# 				   scifi * movie.scifi
+		# predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
+		# 					(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
+		predicted_rating = comedy * movie.comedy + \
+						   action * movie.action + \
+						   romance * movie.romance + \
+						   scifi * movie.scifi
 
 		predicted_rating = predicted_rating / 4.0 * 5.0
 		return predicted_rating
@@ -62,26 +62,40 @@ def update_user_preferences(user):
 			# 1 - comedy
 			comedy = comedy - alpha * calculate_gradient_part(predicted_rating, real_rating, movie.comedy)
 			comedy = limit(comedy)
+
+			movie.comedy = movie.comedy - alpha * calculate_gradient_part(predicted_rating, real_rating, comedy)
+			movie.comedy = limit(movie.comedy)
 			# 2 - action
 			action = action - alpha * calculate_gradient_part(predicted_rating, real_rating, movie.action)
 			action = limit(action)
+
+			movie.action = movie.action - alpha * calculate_gradient_part(predicted_rating, real_rating, action)
+			movie.action = limit(movie.action)
 			# 3 - romance
 			romance = romance - alpha * calculate_gradient_part(predicted_rating, real_rating, movie.romance)
 			romance = limit(romance)
+			
+			movie.romance = movie.romance - alpha * calculate_gradient_part(predicted_rating, real_rating, romance)
+			movie.romance = limit(movie.romance)
+			
 			# 4 - scifi
 			scifi = scifi - alpha * calculate_gradient_part(predicted_rating, real_rating, movie.scifi)
 			scifi = limit(scifi)
 
+
+			movie.scifi = movie.scifi - alpha * calculate_gradient_part(predicted_rating, real_rating, scifi)
+			movie.scifi = limit(movie.scifi)
+
 			alpha = alpha - 0.005
 
 			# Re-Calculate the predicted rating
-			# predicted_rating = comedy * movie.comedy + \
-			# 			   action * movie.action + \
-			# 			   romance * movie.romance + \
-			# 			   scifi * movie.scifi
+			predicted_rating = comedy * movie.comedy + \
+						   action * movie.action + \
+						   romance * movie.romance + \
+						   scifi * movie.scifi
 
-			predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
-					(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
+			# predicted_rating = (1 - abs(comedy - movie.comedy)) + (1 - abs(action - movie.action)) + \
+			# 		(1 - abs(romance - movie.romance)) + (1 - abs(scifi - movie.scifi))
 
 			predicted_rating = predicted_rating / 4.0 * 5.0
 	preference.comedy, preference.action, preference.romance, preference.scifi =  comedy, action, romance, scifi
